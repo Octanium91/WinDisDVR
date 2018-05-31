@@ -8,7 +8,7 @@
 
 ## Instructions
 
-- [Download Script](https://raw.githubusercontent.com/Octanium91/WinDisDVR/master/WinDisDVR.cmd)
+- [Download Script (url)](https://raw.githubusercontent.com/Octanium91/WinDisDVR/master/WinDisDVR.cmd) or press (green button) 'Clone or download' -> 'Download ZIP'
 - Run script (as Administrator)
 
 ## System requirements
