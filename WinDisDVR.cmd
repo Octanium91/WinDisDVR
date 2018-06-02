@@ -39,7 +39,7 @@ for /f "tokens=2*" %%a in ('REG QUERY HKCU\Software\Microsoft\Windows\CurrentVer
 for /f "tokens=2*" %%a in ('REG QUERY HKCU\System\GameConfigStore /v GameDVR_Enabled') do set "regGameDVR=%%b"
 for /f "tokens=2*" %%a in ('REG QUERY HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR /v value') do set "regAllowgameDVR=%%b"
 
-if %regAppCaptureEnable% == null GOTO ERROR18404
+rem if %regAppCaptureEnable% == null GOTO ERROR18404
 if %regGameDVR% == null GOTO ERROR18404
 if %regAllowgameDVR% == null set GOTO ERROR18404
 
@@ -94,20 +94,26 @@ echo.
 echo  [*] %LCBF%
 if exist "%regbackUpFile%" set "regbackUpFile=%~dp0RegBackUpFile_%RANDOM%%RANDOM%%RANDOM%%RANDOM%.reg"
 echo Windows Registry Editor Version 5.00>>"%regbackUpFile%"&echo.>>"%regbackUpFile%"&echo ; Registry file generated in WinDisDVR.cmd>>"%regbackUpFile%"&echo.>>"%regbackUpFile%"
+if not %regAppCaptureEnable% == null (
 echo [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR]>>"%regbackUpFile%"
 reg export HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR "%regbackUpTEMPFile%" /y&& type "%regbackUpTEMPFile%" | findstr "AppCaptureEnabled">>"%regbackUpFile%"&echo.>>"%regbackUpFile%"
+)
 echo [HKEY_CURRENT_USER\System\GameConfigStore]>>"%regbackUpFile%"
 reg export HKCU\System\GameConfigStore "%regbackUpTEMPFile%" /y&& type "%regbackUpTEMPFile%" | findstr "GameDVR_Enabled">>"%regbackUpFile%"&echo.>>"%regbackUpFile%"
 echo [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR]>>"%regbackUpFile%"
 reg export HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR "%regbackUpTEMPFile%" /y&& type "%regbackUpTEMPFile%" | findstr "value">>"%regbackUpFile%"&echo.>>"%regbackUpFile%"
 echo  [*] %LLDWD%
+if not %regAppCaptureEnable% == null (
 REG ADD HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR /v AppCaptureEnabled /t REG_DWORD /d 0 /f
+)
 REG ADD HKCU\System\GameConfigStore /v GameDVR_Enabled /t REG_DWORD /d 0 /f
 REG ADD HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR /v value /t REG_DWORD /d 0 /f
 echo.
 echo  [*] %LLC%
 set "CDVR_ENEBELED=0"
+if not %regAppCaptureEnable% == null (
 for /f "tokens=2*" %%a in ('REG QUERY HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR /v AppCaptureEnabled') do set "cregAppCaptureEnable=%%b"
+)
 for /f "tokens=2*" %%a in ('REG QUERY HKCU\System\GameConfigStore /v GameDVR_Enabled') do set "cregGameDVR=%%b"
 for /f "tokens=2*" %%a in ('REG QUERY HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR /v value') do set "cregAllowgameDVR=%%b"
 
